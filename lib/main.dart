@@ -1,64 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:readathon/pages/pages.dart';
+import 'package:readathon/readathon_theme.dart';
+import 'package:readathon/redux/actions/actions.dart';
+import 'package:readathon/redux/middleware.dart';
+import 'package:readathon/redux/reducers/reducers.dart';
+import 'package:readathon/redux/state.dart';
+import 'package:readathon/repositories/file_repository.dart';
+import 'package:redux/redux.dart';
 
-void main() => runApp(new MyApp());
+void main() => runApp(new ReadathonApp());
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'Flutter Demo',
-      theme: new ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: new MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => new _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+class ReadathonApp extends StatelessWidget {
+  final _store = new Store<AppState>(
+    appStateReducer,
+    initialState: new AppState.booting(),
+    middleware: createStoreMiddleware(
+      new FileRepository(getApplicationDocumentsDirectory),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text(widget.title),
-      ),
-      body: new Center(
-        child: new Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new Text(
-              'You have pushed the button this many times:',
-            ),
-            new Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
+    return new StoreProvider(
+      store: _store,
+      child: new MaterialApp(
+        title: 'Readathon',
+        theme: ReadathonTheme.theme,
+        home: new StoreBuilder(
+          onInit: (store) => store.dispatch(const BootAppAction()),
+          builder: (context, _) => const BootWidget(
+                child: const MainPage(),
+              ),
         ),
       ),
-      floatingActionButton: new FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: new Icon(Icons.add),
-      ),
     );
   }
+}
+
+class BootWidget extends StatelessWidget {
+  final Widget child;
+
+  const BootWidget({
+    this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return new StoreConnector<AppState, bool>(
+      converter: (store) => store.state.isBooting,
+      builder: (context, isBooting) =>
+          isBooting ? _buildBootingScreen(context) : child,
+    );
+  }
+
+  Widget _buildBootingScreen(BuildContext context) => new Scaffold(
+        appBar: new AppBar(
+          title: new Text('Readathon'),
+        ),
+        body: new Center(
+          child: new Text('Loading...'),
+        ),
+      );
 }
