@@ -14,13 +14,13 @@ class AddGoalAction {
 }
 
 class LoadBooksAction {
-  final Iterable<Book> books;
+  final List<Book> books;
 
   const LoadBooksAction(this.books);
 }
 
 class LoadGoalsAction {
-  final Iterable<Goal> goals;
+  final List<Goal> goals;
 
   const LoadGoalsAction(this.goals);
 }

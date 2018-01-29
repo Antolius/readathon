@@ -19,6 +19,27 @@ class MainTabs extends StatelessWidget {
   }
 }
 
+class _ViewModel {
+  final AppSection activeSection;
+  final void Function(AppSection newTab) onTabTuch;
+
+  _ViewModel(this.activeSection, this.onTabTuch);
+
+  static _ViewModel from(Store<AppState> store) =>
+      new _ViewModel(store.state.mainPageState.activeSection, (newTab) =>
+          store.dispatch(new MainPageTabSelectedAction(newTab)),);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is _ViewModel &&
+              runtimeType == other.runtimeType &&
+              activeSection == other.activeSection;
+
+  @override
+  int get hashCode => activeSection.hashCode;
+}
+
 class _MainTabsContent extends StatelessWidget {
   final _ViewModel model;
 
@@ -50,25 +71,4 @@ class _MainTabsContent extends StatelessWidget {
       ],
     );
   }
-}
-
-class _ViewModel {
-  final AppSection activeSection;
-  final void Function(AppSection newTab) onTabTuch;
-
-  _ViewModel(this.activeSection, this.onTabTuch);
-
-  static _ViewModel from(Store<AppState> store) =>
-      new _ViewModel(store.state.mainPageState.activeSection, (newTab) =>
-          store.dispatch(new MainPageTabSelectedAction(newTab)),);
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is _ViewModel &&
-              runtimeType == other.runtimeType &&
-              activeSection == other.activeSection;
-
-  @override
-  int get hashCode => activeSection.hashCode;
 }

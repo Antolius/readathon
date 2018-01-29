@@ -1,2 +1,2 @@
-export 'main_page.dart';
-export 'main_page_tabs.dart';
+export 'package:readathon/pages/main/main_page.dart';
+export 'package:readathon/pages/main/main_page_tabs.dart';

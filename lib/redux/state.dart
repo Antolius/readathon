@@ -31,8 +31,8 @@ class AppState {
 }
 
 class DomainState {
-  final Iterable<Book> books;
-  final Iterable<Goal> goals;
+  final List<Book> books;
+  final List<Goal> goals;
 
   const DomainState({
     this.books: const [],
@@ -40,8 +40,8 @@ class DomainState {
   });
 
   DomainState copyWith({
-    Iterable<Book> books,
-    Iterable<Goal> goals,
+    List<Book> books,
+    List<Goal> goals,
   }) =>
       new DomainState(
         books: books ?? this.books,

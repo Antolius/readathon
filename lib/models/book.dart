@@ -9,7 +9,7 @@ class Author {
   final String id;
   final String name;
   final String imageUrl;
-  final Iterable<TagValue<dynamic>> tags;
+  final List<TagValue<dynamic>> tags;
 
   Author(
     this.name, {
@@ -26,13 +26,14 @@ class Author {
         'tags': this.tags.map((tag) => tag.toJson()).toList(growable: false),
       };
 
-  static Author fromJson(Map<String, dynamic> json) =>
-      new Author(json['name'] as String,
-          id: json['id'] as String,
-          imageUrl: json['imageUrl'] as String,
-          tags: (json['tags'] as List<Map<String, dynamic>>)
-              .map((tagJson) => TagValue.fromJson(tagJson))
-              .toList(growable: false));
+  static Author fromJson(Map<String, dynamic> json) => new Author(
+        json['name'] as String,
+        id: json['id'] as String,
+        imageUrl: json['imageUrl'] as String,
+        tags: (json['tags'] as List<Map<String, dynamic>>)
+            .map((tagJson) => TagValue.fromJson(tagJson))
+            .toList(growable: false),
+      );
 
   @override
   bool operator ==(Object other) =>
@@ -42,11 +43,14 @@ class Author {
           id == other.id &&
           name == other.name &&
           imageUrl == other.imageUrl &&
-          const IterableEquality().equals(tags, other.tags);
+          const ListEquality().equals(tags, other.tags);
 
   @override
   int get hashCode =>
-      id.hashCode ^ name.hashCode ^ imageUrl.hashCode ^ tags.hashCode;
+      id.hashCode ^
+      name.hashCode ^
+      imageUrl.hashCode ^
+      const ListEquality().hash(tags);
 }
 
 class Book {
@@ -57,8 +61,8 @@ class Book {
   final String title;
   final int numberOfPages;
   final String coverImageUrl;
-  final Iterable<Author> authors;
-  final Iterable<TagValue<dynamic>> tags;
+  final List<Author> authors;
+  final List<TagValue<dynamic>> tags;
 
   Book(
     this.title,
@@ -66,7 +70,7 @@ class Book {
     this.authors, {
     String id,
     this.coverImageUrl = UNKNOWN_COVER_IMAGE_URL,
-    Iterable<TagValue<dynamic>> tags,
+    List<TagValue<dynamic>> tags,
   })
       : this.id = id ?? new Uuid().v4(),
         this.tags = tags ?? const [];
@@ -84,16 +88,17 @@ class Book {
       };
 
   static Book fromJson(Map<String, dynamic> json) => new Book(
-      json['title'] as String,
-      json['numberOfPages'] as int,
-      (json['authors'] as List<Map<String, dynamic>>)
-          .map((authorJson) => Author.fromJson(authorJson))
-          .toList(growable: false),
-      id: json['id'] as String,
-      coverImageUrl: json['coverImageUrl'] as String,
-      tags: (json['tags'] as List<Map<String, dynamic>>)
-          .map((tagJson) => TagValue.fromJson(tagJson))
-          .toList(growable: false));
+        json['title'] as String,
+        json['numberOfPages'] as int,
+        (json['authors'] as List<Map<String, dynamic>>)
+            .map((authorJson) => Author.fromJson(authorJson))
+            .toList(growable: false),
+        id: json['id'] as String,
+        coverImageUrl: json['coverImageUrl'] as String,
+        tags: (json['tags'] as List<Map<String, dynamic>>)
+            .map((tagJson) => TagValue.fromJson(tagJson))
+            .toList(growable: false),
+      );
 
   @override
   bool operator ==(Object other) =>
@@ -104,8 +109,8 @@ class Book {
           title == other.title &&
           numberOfPages == other.numberOfPages &&
           coverImageUrl == other.coverImageUrl &&
-          const IterableEquality().equals(authors, other.authors) &&
-          const IterableEquality().equals(tags, other.tags);
+          const ListEquality().equals(authors, other.authors) &&
+          const ListEquality().equals(tags, other.tags);
 
   @override
   int get hashCode =>
@@ -113,6 +118,6 @@ class Book {
       title.hashCode ^
       numberOfPages.hashCode ^
       coverImageUrl.hashCode ^
-      authors.hashCode ^
-      tags.hashCode;
+      const ListEquality().hash(authors) ^
+      const ListEquality().hash(tags);
 }

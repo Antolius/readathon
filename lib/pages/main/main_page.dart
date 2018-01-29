@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:readathon/app_sections.dart';
-import 'package:readathon/pages/main_page_tabs.dart';
+import 'package:readathon/pages/main/main_page_tabs.dart';
 import 'package:readathon/redux/state.dart';
 
 class MainPage extends StatelessWidget {

@@ -5,12 +5,12 @@ import 'package:readathon/models/models.dart';
 
 abstract class Repository {
 
-  Future saveBooks(Iterable<Book> books);
+  Future saveBooks(List<Book> books);
 
-  Future sageGoals(Iterable<Goal> goals);
+  Future sageGoals(List<Goal> goals);
 
-  Future<Iterable<Book>> loadBooks();
+  Future<List<Book>> loadBooks();
 
-  Future<Iterable<Goal>> loadGoals();
+  Future<List<Goal>> loadGoals();
 
 }

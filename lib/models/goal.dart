@@ -64,7 +64,7 @@ class Goal {
 }
 
 abstract class TagExpression {
-  bool evaluate(Iterable<TagValue> values);
+  bool evaluate(List<TagValue> values);
 
   static TagExpression from(TagValueVisitor<bool> checker) =>
       new SingleTagExpression(checker);
@@ -106,7 +106,7 @@ class SingleTagExpression extends TagExpression {
   SingleTagExpression(this.predicate);
 
   @override
-  bool evaluate(Iterable<TagValue> values) {
+  bool evaluate(List<TagValue> values) {
     try {
       return values.firstWhere((val) => val.accept(this.predicate)) != null;
     } catch (e) {
@@ -141,7 +141,7 @@ class AndTagExpression extends TagExpression {
   AndTagExpression(this.first, this.second);
 
   @override
-  bool evaluate(Iterable<TagValue> values) =>
+  bool evaluate(List<TagValue> values) =>
       first.evaluate(values) && second.evaluate(values);
 
   @override
@@ -173,7 +173,7 @@ class OrTagExpression extends TagExpression {
   OrTagExpression(this.first, this.second);
 
   @override
-  bool evaluate(Iterable<TagValue> values) =>
+  bool evaluate(List<TagValue> values) =>
       first.evaluate(values) || second.evaluate(values);
 
   @override
