@@ -16,7 +16,7 @@ void main() => runApp(new ReadathonApp());
 class ReadathonApp extends StatelessWidget {
   final _store = new Store<AppState>(
     appStateReducer,
-    initialState: new AppState.booting(),
+    initialState: new AppState.init(),
     middleware: createStoreMiddleware(
       new FileRepository(getApplicationDocumentsDirectory),
     ),

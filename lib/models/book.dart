@@ -64,16 +64,33 @@ class Book {
   final List<Author> authors;
   final List<TagValue<dynamic>> tags;
 
-  Book(
+  Book({
     this.title,
     this.numberOfPages,
-    this.authors, {
+    this.authors,
     String id,
     this.coverImageUrl = UNKNOWN_COVER_IMAGE_URL,
     List<TagValue<dynamic>> tags,
   })
       : this.id = id ?? new Uuid().v4(),
         this.tags = tags ?? const [];
+
+  Book copyWith({
+    String id,
+    String title,
+    int numberOfPages,
+    String coverImageUrl,
+    List<Author> authors,
+    List<TagValue<dynamic>> tags,
+  }) =>
+      new Book(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        numberOfPages: numberOfPages ?? this.numberOfPages,
+        coverImageUrl: coverImageUrl ?? this.coverImageUrl,
+        authors: authors ?? this.authors,
+        tags: tags ?? this.tags,
+      );
 
   Map<String, dynamic> toJson() => {
         'id': this.id,
@@ -88,9 +105,9 @@ class Book {
       };
 
   static Book fromJson(Map<String, dynamic> json) => new Book(
-        json['title'] as String,
-        json['numberOfPages'] as int,
-        (json['authors'] as List<Map<String, dynamic>>)
+        title: json['title'] as String,
+        numberOfPages: json['numberOfPages'] as int,
+        authors: (json['authors'] as List<Map<String, dynamic>>)
             .map((authorJson) => Author.fromJson(authorJson))
             .toList(growable: false),
         id: json['id'] as String,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:readathon/app_sections.dart';
+import 'package:readathon/pages/books/books_list.dart';
 import 'package:readathon/pages/main/main_page_tabs.dart';
 import 'package:readathon/redux/state.dart';
 
@@ -36,9 +37,7 @@ class _MainPageContents extends StatelessWidget {
   Widget _buildBody(BuildContext context) {
     switch (activeSection) {
       case AppSection.BOOKS:
-        return new Center(
-          child: new Text('BOOKS'),
-        );
+        return const BooksList();
       case AppSection.GOALS:
         return new Center(
           child: new Text('GOALS'),
@@ -47,6 +46,8 @@ class _MainPageContents extends StatelessWidget {
         return new Center(
           child: new Text('STATS'),
         );
+      default:
+        throw new StateError('unknown type of app section: $activeSection');
     }
   }
 }

@@ -6,27 +6,36 @@ class AppState {
   final DomainState domainState;
   final OverlayState overlayState;
   final MainPageState mainPageState;
+  final AddBookPageState addBookPageState;
 
   AppState({
     this.isBooting = false,
     this.domainState = const DomainState(),
     this.overlayState = const OverlayState(),
     this.mainPageState = const MainPageState(),
+    this.addBookPageState = const AddBookPageState(),
   });
 
-  factory AppState.booting() => new AppState(isBooting: true);
+  factory AppState.init() => new AppState(
+        isBooting: true,
+        addBookPageState: new AddBookPageState(
+          book: new Book(),
+        ),
+      );
 
   AppState copyWith({
     bool isBooting,
     DomainState domainState,
     OverlayState overlayState,
     MainPageState mainPageState,
+    AddBookPageState addBookPageState,
   }) =>
       new AppState(
         isBooting: isBooting ?? this.isBooting,
         domainState: domainState ?? this.domainState,
         overlayState: overlayState ?? this.overlayState,
         mainPageState: mainPageState ?? this.mainPageState,
+        addBookPageState: addBookPageState ?? this.addBookPageState,
       );
 }
 
@@ -73,4 +82,10 @@ class MainPageState {
   final AppSection activeSection;
 
   const MainPageState({this.activeSection: AppSection.BOOKS});
+}
+
+class AddBookPageState {
+  final Book book;
+
+  const AddBookPageState({this.book});
 }

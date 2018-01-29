@@ -120,9 +120,9 @@ void main() {
 }
 
 Book givenBookWith(Author givenAuthor, int givenNumberOfPages) => new Book(
-      'Title',
-      0,
-      [givenAuthor],
+      title: 'Title',
+      numberOfPages: 0,
+      authors: [givenAuthor],
       tags: [
         new StringTagValue(Tag.AUTHOR, givenAuthor.id),
         new NumTagValue(Tag.NUMBER_OF_PAGES, givenNumberOfPages),

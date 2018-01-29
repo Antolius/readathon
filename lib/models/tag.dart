@@ -1,6 +1,12 @@
 import 'package:uuid/uuid.dart';
 
 class Tag {
+  static final Set<Tag> DEFAULTS = new Set.from([
+    AUTHOR,
+    NUMBER_OF_PAGES,
+    LANGUAGE,
+    COUNTRY,
+  ]);
   static final Tag AUTHOR = new Tag('author', id: 'TAG_AUTHOR');
   static final Tag NUMBER_OF_PAGES =
       new Tag('number of pages', id: 'TAG_NUMBER_OF_PAGES');
