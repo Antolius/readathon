@@ -1,7 +1,8 @@
+import 'package:readathon/app_sections.dart';
 import 'package:readathon/pages/main_page_tabs.dart';
 
 class MainPageTabSelectedAction {
-  final MainPageTab selectedTab;
+  final AppSection activatedSection;
 
-  const MainPageTabSelectedAction(this.selectedTab);
+  const MainPageTabSelectedAction(this.activatedSection);
 }

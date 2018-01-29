@@ -1,0 +1,1 @@
+enum AppSection { BOOKS, GOALS, STATS }

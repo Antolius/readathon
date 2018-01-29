@@ -1,5 +1,5 @@
+import 'package:readathon/app_sections.dart';
 import 'package:readathon/models/models.dart';
-import 'package:readathon/pages/main_page_tabs.dart';
 
 class AppState {
   final bool isBooting;
@@ -70,7 +70,7 @@ class OverlayState {
 }
 
 class MainPageState {
-  final MainPageTab activeTab;
+  final AppSection activeSection;
 
-  const MainPageState({this.activeTab: MainPageTab.BOOKS});
+  const MainPageState({this.activeSection: AppSection.BOOKS});
 }

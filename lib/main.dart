@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:readathon/app_sections.dart';
 import 'package:readathon/pages/pages.dart';
 import 'package:readathon/readathon_theme.dart';
 import 'package:readathon/redux/actions/actions.dart';
@@ -25,15 +26,19 @@ class ReadathonApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return new StoreProvider(
       store: _store,
-      child: new MaterialApp(
-        title: 'Readathon',
-        theme: ReadathonTheme.theme,
-        home: new StoreBuilder(
-          onInit: (store) => store.dispatch(const BootAppAction()),
-          builder: (context, _) => const BootWidget(
-                child: const MainPage(),
+      child: new StoreConnector<AppState, AppSection>(
+        distinct: true,
+        converter: (store) => store.state.mainPageState.activeSection,
+        builder: (context, section) => new MaterialApp(
+              title: 'Readathon',
+              theme: ReadathonTheme.THEMES[section],
+              home: new StoreBuilder(
+                onInit: (store) => store.dispatch(const BootAppAction()),
+                builder: (context, _) => const BootWidget(
+                      child: const MainPage(),
+                    ),
               ),
-        ),
+            ),
       ),
     );
   }

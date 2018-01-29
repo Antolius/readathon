@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:readathon/app_sections.dart';
 import 'package:readathon/pages/main_page_tabs.dart';
 import 'package:readathon/redux/state.dart';
 
@@ -8,18 +9,18 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new StoreConnector<AppState, MainPageTab>(
+    return new StoreConnector<AppState, AppSection>(
       distinct: true,
-      converter: (store) => store.state.mainPageState.activeTab,
+      converter: (store) => store.state.mainPageState.activeSection,
       builder: (context, activeTab) => new _MainPageContents(activeTab),
     );
   }
 }
 
 class _MainPageContents extends StatelessWidget {
-  final MainPageTab activeTab;
+  final AppSection activeSection;
 
-  const _MainPageContents(this.activeTab);
+  const _MainPageContents(this.activeSection);
 
   @override
   Widget build(BuildContext context) {
@@ -33,16 +34,16 @@ class _MainPageContents extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
-    switch (activeTab) {
-      case MainPageTab.BOOKS:
+    switch (activeSection) {
+      case AppSection.BOOKS:
         return new Center(
           child: new Text('BOOKS'),
         );
-      case MainPageTab.GOALS:
+      case AppSection.GOALS:
         return new Center(
           child: new Text('GOALS'),
         );
-      case MainPageTab.STATS:
+      case AppSection.STATS:
         return new Center(
           child: new Text('STATS'),
         );

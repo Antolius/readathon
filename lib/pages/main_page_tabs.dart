@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:readathon/app_sections.dart';
+import 'package:readathon/readathon_theme.dart';
 import 'package:readathon/redux/actions/actions.dart';
 import 'package:readathon/redux/state.dart';
 import 'package:redux/redux.dart';
-
-enum MainPageTab { BOOKS, GOALS, STATS }
 
 class MainTabs extends StatelessWidget {
   const MainTabs();
@@ -28,21 +28,24 @@ class _MainTabsContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      currentIndex: model.activeTab.index,
-      onTap: (index) => model.onTabTuch(MainPageTab.values[index]),
+      type: BottomNavigationBarType.shifting,
+      currentIndex: model.activeSection.index,
+      onTap: (index) => model.onTabTuch(AppSection.values[index]),
       items: <BottomNavigationBarItem>[
         new BottomNavigationBarItem(
           icon: new Icon(Icons.book),
           title: new Text('Books'),
+          backgroundColor: ReadathonTheme.COLORS[AppSection.BOOKS],
         ),
         new BottomNavigationBarItem(
           icon: new Icon(Icons.flag),
           title: new Text('Goals'),
+          backgroundColor: ReadathonTheme.COLORS[AppSection.GOALS],
         ),
         new BottomNavigationBarItem(
           icon: new Icon(Icons.timeline),
           title: new Text('Stats'),
+          backgroundColor: ReadathonTheme.COLORS[AppSection.STATS],
         ),
       ],
     );
@@ -50,13 +53,13 @@ class _MainTabsContent extends StatelessWidget {
 }
 
 class _ViewModel {
-  final MainPageTab activeTab;
-  final void Function(MainPageTab newTab) onTabTuch;
+  final AppSection activeSection;
+  final void Function(AppSection newTab) onTabTuch;
 
-  _ViewModel(this.activeTab, this.onTabTuch);
+  _ViewModel(this.activeSection, this.onTabTuch);
 
   static _ViewModel from(Store<AppState> store) =>
-      new _ViewModel(store.state.mainPageState.activeTab, (newTab) =>
+      new _ViewModel(store.state.mainPageState.activeSection, (newTab) =>
           store.dispatch(new MainPageTabSelectedAction(newTab)),);
 
   @override
@@ -64,8 +67,8 @@ class _ViewModel {
       identical(this, other) ||
           other is _ViewModel &&
               runtimeType == other.runtimeType &&
-              activeTab == other.activeTab;
+              activeSection == other.activeSection;
 
   @override
-  int get hashCode => activeTab.hashCode;
+  int get hashCode => activeSection.hashCode;
 }
