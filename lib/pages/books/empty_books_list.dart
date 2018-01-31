@@ -35,12 +35,7 @@ class EmptyBooksList extends StatelessWidget {
           new Padding(
             padding: new EdgeInsets.only(top: 48.0),
             child: new RaisedButton(
-              onPressed: () => Navigator.of(context).push(
-                    new MaterialPageRoute(
-                      fullscreenDialog: true,
-                      builder: (context) => new AddBookModal(),
-                    ),
-                  ),
+              onPressed: () => AddBookModal.visit(context),
               child: new Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[

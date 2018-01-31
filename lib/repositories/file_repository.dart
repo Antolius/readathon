@@ -50,7 +50,7 @@ class FileRepository extends Repository {
 
   @override
   Future saveBooks(List<Book> books) async {
-    var jsonString = JSON.encode(books.map((book) => book.toJson()));
+    var jsonString = JSON.encode(books.map((book) => book.toJson()).toList(growable: false));
     var file = await _booksFile;
     await file.writeAsString(jsonString);
   }

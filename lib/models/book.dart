@@ -67,13 +67,12 @@ class Book {
   Book({
     this.title,
     this.numberOfPages,
-    this.authors,
+    this.authors : const [],
     String id,
-    this.coverImageUrl = UNKNOWN_COVER_IMAGE_URL,
-    List<TagValue<dynamic>> tags,
+    this.coverImageUrl : UNKNOWN_COVER_IMAGE_URL,
+    this.tags : const [],
   })
-      : this.id = id ?? new Uuid().v4(),
-        this.tags = tags ?? const [];
+      : this.id = id ?? new Uuid().v4();
 
   Book copyWith({
     String id,

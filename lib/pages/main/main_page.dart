@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:readathon/app_sections.dart';
+import 'package:readathon/pages/books/add_book.dart';
 import 'package:readathon/pages/books/books_list.dart';
 import 'package:readathon/pages/main/main_page_tabs.dart';
 import 'package:readathon/redux/state.dart';
@@ -31,6 +32,7 @@ class _MainPageContents extends StatelessWidget {
       ),
       body: _buildBody(context),
       bottomNavigationBar: new MainTabs(),
+      floatingActionButton: _buildFAB(context),
     );
   }
 
@@ -48,6 +50,22 @@ class _MainPageContents extends StatelessWidget {
         );
       default:
         throw new StateError('unknown type of app section: $activeSection');
+    }
+  }
+
+  Widget _buildFAB(BuildContext context) {
+    switch (activeSection) {
+      case AppSection.BOOKS:
+        return new FloatingActionButton(
+          child: new Icon(
+            Icons.plus_one,
+            color: Colors.white,
+          ),
+          tooltip: 'Add new book',
+          onPressed: () => AddBookModal.visit(context),
+        );
+      default:
+        return null;
     }
   }
 }

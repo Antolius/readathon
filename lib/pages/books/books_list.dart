@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:readathon/models/models.dart';
-import 'package:readathon/pages/books/empty_list_state.dart';
+import 'package:readathon/pages/books/empty_books_list.dart';
 import 'package:readathon/redux/state.dart';
 import 'package:redux/redux.dart';
 
