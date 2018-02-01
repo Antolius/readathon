@@ -57,9 +57,13 @@ class _MainPageContents extends StatelessWidget {
     switch (activeSection) {
       case AppSection.BOOKS:
         return new FloatingActionButton(
-          child: new Icon(
-            Icons.plus_one,
-            color: Colors.white,
+          child: new Text(
+            '+',
+            style: Theme.of(context).textTheme.button.copyWith(
+                  color: Colors.white,
+                  fontSize: 38.0,
+                  fontWeight: FontWeight.w100,
+                ),
           ),
           tooltip: 'Add new book',
           onPressed: () => AddBookModal.visit(context),
