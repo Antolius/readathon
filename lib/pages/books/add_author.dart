@@ -49,6 +49,7 @@ class AddAuthorModal extends StatelessWidget {
                     ),
                     validator: (val) =>
                         val?.isNotEmpty ?? false ? null : 'Name is required',
+                    autofocus: true,
                   ),
                 ),
               ],

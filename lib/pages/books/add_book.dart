@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:readathon/models/models.dart';
-import 'package:readathon/pages/books/add_author.dart';
+import 'package:readathon/pages/books/authors_picker.dart';
 import 'package:readathon/redux/actions/actions.dart';
 import 'package:readathon/redux/state.dart';
 import 'package:redux/redux.dart';
@@ -109,6 +109,7 @@ class _AddBookForm extends StatelessWidget {
         child: new Form(
           key: _formKey,
           child: new Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               new TextFormField(
                 key: _titleKey,
@@ -126,85 +127,4 @@ class _AddBookForm extends StatelessWidget {
       ),
     );
   }
-}
-
-class AuthorsPicker extends StatefulWidget {
-  final Set<Author> existingAuthors;
-
-  const AuthorsPicker(this.existingAuthors);
-
-  @override
-  AuthorsPickerState createState() => new AuthorsPickerState();
-}
-
-class AuthorsPickerState extends State<AuthorsPicker> {
-  Set<Author> availableAuthors;
-  Set<Author> pickedAuthors;
-
-  @override
-  void initState() {
-    super.initState();
-    pickedAuthors = [].toSet();
-    availableAuthors = new Set.from(widget.existingAuthors);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return new Padding(
-      padding: new EdgeInsets.only(top: 8.0),
-      child: new Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          new Padding(
-            padding: new EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
-            child: new Icon(Icons.person),
-          ),
-          new Column(children: _buildAuthorFields()),
-        ],
-      ),
-    );
-  }
-
-  List<Widget> _buildAuthorFields() {
-    var fields = [];
-    if (availableAuthors.isNotEmpty) {
-      fields.addAll(_renderPickedAuthors());
-      if (availableAuthors.length > pickedAuthors.length) {
-        fields.add(_renderDropdown(null));
-      }
-    }
-    fields.add(new FlatButton(
-      onPressed: () => _onAddNewAuthor(context),
-      child: new Text('ADD NEW AUTHOR'),
-    ));
-
-    return fields;
-  }
-
-  _onAddNewAuthor(BuildContext context) async {
-    Author author = await showDialog(
-      context: context,
-      child: new AddAuthorModal(),
-    );
-    if (author != null) {
-      setState(() => availableAuthors.add(author));
-    }
-  }
-
-  List<Widget> _renderPickedAuthors() =>
-      pickedAuthors.map(_renderDropdown).toList(growable: true);
-
-  Widget _renderDropdown(Author author) => new DropdownButton(
-        value: author,
-        items: availableAuthors.map(_renderOptions).toList(),
-        onChanged: (picked) => setState(() {
-              pickedAuthors.add(picked);
-            }),
-      );
-
-  DropdownMenuItem<Author> _renderOptions(Author author) =>
-      new DropdownMenuItem<Author>(
-        child: new Text(author.name),
-        value: author,
-      );
 }
