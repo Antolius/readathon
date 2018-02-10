@@ -12,9 +12,9 @@ void main() {
   group('Book', () {
     test('should serialize into JSON', () {
       var givenBook = new Book(
-        title: 'Book title',
-        numberOfPages: 155,
-        authors: [
+        'Book title',
+        155,
+        [
           new Author(
             'Author name',
             id: 'AUTHOR_ID',
@@ -51,9 +51,9 @@ void main() {
       var actual = Book.fromJson(JSON.decode(givenJson));
 
       var expected = new Book(
-        title: 'Book title',
-        numberOfPages: 155,
-        authors: [
+        'Book title',
+        155,
+        [
           new Author(
             'Author name',
             id: 'AUTHOR_ID',

@@ -68,6 +68,6 @@ void main() {
 
 Widget _authorsPicker(Set givenAuthors) => new MaterialApp(
       home: new Material(
-        child: new AuthorsPicker(givenAuthors),
+        child: new AuthorsPickerFormField(existingAuthors: givenAuthors),
       ),
     );

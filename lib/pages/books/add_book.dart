@@ -72,6 +72,10 @@ class _AddBookForm extends StatelessWidget {
   static final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   static final GlobalKey<FormFieldState<String>> _titleKey =
       new GlobalKey<FormFieldState<String>>();
+  static final GlobalKey<FormFieldState<String>> _numberOfPagesKey =
+      new GlobalKey<FormFieldState<String>>();
+  static final GlobalKey<FormFieldState<List<Author>>> _authorsKey =
+      new GlobalKey<FormFieldState<List<Author>>>();
   final _ViewModel _model;
 
   _AddBookForm(this._model);
@@ -86,9 +90,9 @@ class _AddBookForm extends StatelessWidget {
   }
 
   _readFormFields() => new Book(
-        title: _titleKey.currentState.value,
-        numberOfPages: 0,
-        authors: [],
+        _titleKey.currentState.value,
+        int.parse(_numberOfPagesKey.currentState.value),
+        _authorsKey.currentState.value,
         tags: [],
       );
 
@@ -111,6 +115,7 @@ class _AddBookForm extends StatelessWidget {
           children: <Widget>[
             new TextFormField(
               key: _titleKey,
+              autofocus: false,
               decoration: new InputDecoration(
                 icon: const Icon(Icons.title),
                 labelText: 'Title',
@@ -118,7 +123,28 @@ class _AddBookForm extends StatelessWidget {
               validator: (val) =>
                   val?.isNotEmpty ?? false ? null : 'Title is required',
             ),
-            new AuthorsPicker(_model.existingAuthors),
+            new TextFormField(
+              key: _numberOfPagesKey,
+              autofocus: false,
+              keyboardType: TextInputType.number,
+              decoration: new InputDecoration(
+                  icon: const Icon(Icons.library_books),
+                  labelText: 'Number of pages'),
+              validator: (val) {
+                if (val?.isEmpty ?? true) return 'Number of pages is required';
+                int num = int.parse(val, onError: (_) => null);
+                if (num == null) return 'Must be a whole number';
+                if (num < 1) return 'Number of pages must be positive';
+                return null;
+              },
+            ),
+            new AuthorsPickerFormField(
+              key: _authorsKey,
+              existingAuthors: _model.existingAuthors,
+              validator: (val) => val?.isNotEmpty ?? false
+                  ? null
+                  : 'At least one author is required',
+            ),
           ],
         ),
       ),

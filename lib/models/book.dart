@@ -4,7 +4,7 @@ import 'package:uuid/uuid.dart';
 
 class Author {
   //TODO: specify
-  static const UNKNOWN_IMAGE_URL = '';
+  static const UNKNOWN_IMAGE_URL = 'UNKNOWN_IMAGE_URL';
 
   final String id;
   final String name;
@@ -17,7 +17,10 @@ class Author {
     this.imageUrl = UNKNOWN_IMAGE_URL,
     this.tags = const [],
   })
-      : this.id = id ?? new Uuid().v4();
+      : this.id = id ?? new Uuid().v4(),
+        assert(name != null && name.trim().isNotEmpty),
+        assert(imageUrl != null && imageUrl.trim().isNotEmpty),
+        assert(tags != null);
 
   Map<String, dynamic> toJson() => {
         'id': this.id,
@@ -55,7 +58,7 @@ class Author {
 
 class Book {
   //TODO: specify
-  static const UNKNOWN_COVER_IMAGE_URL = '';
+  static const UNKNOWN_COVER_IMAGE_URL = 'UNKNOWN_COVER_IMAGE_URL';
 
   final String id;
   final String title;
@@ -64,15 +67,20 @@ class Book {
   final List<Author> authors;
   final List<TagValue<dynamic>> tags;
 
-  Book({
+  Book(
     this.title,
     this.numberOfPages,
-    this.authors : const [],
+    this.authors, {
     String id,
-    this.coverImageUrl : UNKNOWN_COVER_IMAGE_URL,
-    this.tags : const [],
+    this.coverImageUrl: UNKNOWN_COVER_IMAGE_URL,
+    this.tags: const [],
   })
-      : this.id = id ?? new Uuid().v4();
+      : this.id = id ?? new Uuid().v4(),
+        assert(title != null && title.trim().isNotEmpty),
+        assert(numberOfPages != null && numberOfPages > 0),
+        assert(authors != null && authors.length > 0),
+        assert(coverImageUrl != null && coverImageUrl.trim().isNotEmpty),
+        assert(tags != null);
 
   Book copyWith({
     String id,
@@ -83,11 +91,11 @@ class Book {
     List<TagValue<dynamic>> tags,
   }) =>
       new Book(
-        id: id ?? this.id,
-        title: title ?? this.title,
-        numberOfPages: numberOfPages ?? this.numberOfPages,
+        title ?? this.title,
+        numberOfPages ?? this.numberOfPages,
+        authors ?? this.authors,
         coverImageUrl: coverImageUrl ?? this.coverImageUrl,
-        authors: authors ?? this.authors,
+        id: id ?? this.id,
         tags: tags ?? this.tags,
       );
 
@@ -104,9 +112,9 @@ class Book {
       };
 
   static Book fromJson(Map<String, dynamic> json) => new Book(
-        title: json['title'] as String,
-        numberOfPages: json['numberOfPages'] as int,
-        authors: (json['authors'] as List<Map<String, dynamic>>)
+        json['title'] as String,
+        json['numberOfPages'] as int,
+        (json['authors'] as List<Map<String, dynamic>>)
             .map((authorJson) => Author.fromJson(authorJson))
             .toList(growable: false),
         id: json['id'] as String,
