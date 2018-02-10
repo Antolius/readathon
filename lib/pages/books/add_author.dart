@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/src/material/dialog.dart';
 import 'package:flutter/src/material/flat_button.dart';
 import 'package:flutter/src/material/icons.dart';
@@ -27,51 +28,56 @@ class AddAuthorModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Dialog(
-      child: new Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          new Padding(
-            padding: new EdgeInsets.all(24.0),
-            child: new Column(
-              children: <Widget>[
-                new Text(
-                  'Add new author',
-                  style: Theme.of(context).textTheme.title,
-                ),
-                new Padding(
-                  padding: new EdgeInsets.only(top: 20.0),
-                  child: new TextFormField(
-                    key: _nameKey,
-                    decoration: new InputDecoration(
-                      icon: const Icon(Icons.person),
-                      labelText: 'Name',
-                    ),
-                    validator: (val) =>
-                        val?.isNotEmpty ?? false ? null : 'Name is required',
-                    autofocus: true,
+    var mediaQuery = MediaQuery.of(context);
+    return new AnimatedContainer(
+      padding: mediaQuery.viewInsets,
+      duration: const Duration(milliseconds: 300),
+      child: new Dialog(
+        child: new ListView(
+          shrinkWrap: true,
+          children: <Widget>[
+            new Padding(
+              padding: new EdgeInsets.all(24.0),
+              child: new Column(
+                children: <Widget>[
+                  new Text(
+                    'Add new author',
+                    style: Theme.of(context).textTheme.title,
                   ),
-                ),
-              ],
+                  new Padding(
+                    padding: new EdgeInsets.only(top: 20.0),
+                    child: new TextFormField(
+                      key: _nameKey,
+                      decoration: new InputDecoration(
+                        icon: const Icon(Icons.person),
+                        labelText: 'Name',
+                      ),
+                      validator: (val) =>
+                          val?.isNotEmpty ?? false ? null : 'Name is required',
+                      autofocus: true,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          new Padding(
-            padding: new EdgeInsets.all(8.0),
-            child: new Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                new FlatButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: new Text('CANCLE'),
-                ),
-                new FlatButton(
-                  onPressed: () => _onSave(context),
-                  child: new Text('SAVE'),
-                ),
-              ],
+            new Padding(
+              padding: new EdgeInsets.all(8.0),
+              child: new Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  new FlatButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: new Text('CANCLE'),
+                  ),
+                  new FlatButton(
+                    onPressed: () => _onSave(context),
+                    child: new Text('SAVE'),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

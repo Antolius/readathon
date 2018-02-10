@@ -104,25 +104,22 @@ class _AddBookForm extends StatelessWidget {
           ),
         ],
       ),
-      body: new Padding(
-        padding: new EdgeInsets.all(16.0),
-        child: new Form(
-          key: _formKey,
-          child: new Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              new TextFormField(
-                key: _titleKey,
-                decoration: new InputDecoration(
-                  icon: const Icon(Icons.title),
-                  labelText: 'Title',
-                ),
-                validator: (val) =>
-                    val?.isNotEmpty ?? false ? null : 'Title is required',
+      body: new Form(
+        key: _formKey,
+        child: new ListView(
+          padding: new EdgeInsets.all(16.0),
+          children: <Widget>[
+            new TextFormField(
+              key: _titleKey,
+              decoration: new InputDecoration(
+                icon: const Icon(Icons.title),
+                labelText: 'Title',
               ),
-              new AuthorsPicker(_model.existingAuthors),
-            ],
-          ),
+              validator: (val) =>
+                  val?.isNotEmpty ?? false ? null : 'Title is required',
+            ),
+            new AuthorsPicker(_model.existingAuthors),
+          ],
         ),
       ),
     );
