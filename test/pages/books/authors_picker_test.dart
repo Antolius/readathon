@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:readathon/models/models.dart';
-import 'package:readathon/pages/books/authors_picker.dart';
+import 'package:readathon/pages/books/authors_picker_form_field.dart';
 
 void main() {
   testWidgets(

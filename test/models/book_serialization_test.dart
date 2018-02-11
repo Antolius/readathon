@@ -5,9 +5,9 @@ import 'package:readathon/models/tag.dart';
 import 'package:test/test.dart';
 
 void main() {
-  var strTag = new Tag('Tag1', id: 'TAG_1_ID');
-  var numTag = new Tag('Tag2', id: 'TAG_2_ID');
-  var boolTag = new Tag('Tag3', id: 'TAG_3_ID');
+  var strTag = new Tag('Tag1', TagType.STRING, id: 'TAG_1_ID');
+  var numTag = new Tag('Tag2', TagType.NUM, id: 'TAG_2_ID');
+  var boolTag = new Tag('Tag3', TagType.BOOL, id: 'TAG_3_ID');
 
   group('Book', () {
     test('should serialize into JSON', () {
@@ -40,13 +40,13 @@ void main() {
       var actual = JSON.encode(givenBook.toJson());
 
       var expected =
-          '{"id":"BOOK_ID","title":"Book title","numberOfPages":155,"coverImageUrl":"book/cover/image.png","authors":[{"id":"AUTHOR_ID","name":"Author name","imageUrl":"author/image.png","tags":[{"tag":{"id":"TAG_1_ID","name":"Tag1"},"value":"String tag value","type":"String"},{"tag":{"id":"TAG_3_ID","name":"Tag3"},"value":true,"type":"bool"},{"tag":{"id":"TAG_2_ID","name":"Tag2"},"value":1,"type":"num"},{"tag":{"id":"TAG_2_ID","name":"Tag2"},"value":0.5,"type":"num"}]}],"tags":[{"tag":{"id":"TAG_1_ID","name":"Tag1"},"value":"String tag value","type":"String"},{"tag":{"id":"TAG_3_ID","name":"Tag3"},"value":true,"type":"bool"},{"tag":{"id":"TAG_2_ID","name":"Tag2"},"value":1,"type":"num"},{"tag":{"id":"TAG_2_ID","name":"Tag2"},"value":0.5,"type":"num"}]}';
+          '{"id":"BOOK_ID","title":"Book title","numberOfPages":155,"coverImageUrl":"book/cover/image.png","authors":[{"id":"AUTHOR_ID","name":"Author name","imageUrl":"author/image.png","tags":[{"tag":{"id":"TAG_1_ID","name":"Tag1","type":0,"isUserEditable":true},"value":"String tag value","type":"String"},{"tag":{"id":"TAG_3_ID","name":"Tag3","type":2,"isUserEditable":true},"value":true,"type":"bool"},{"tag":{"id":"TAG_2_ID","name":"Tag2","type":1,"isUserEditable":true},"value":1,"type":"num"},{"tag":{"id":"TAG_2_ID","name":"Tag2","type":1,"isUserEditable":true},"value":0.5,"type":"num"}]}],"tags":[{"tag":{"id":"TAG_1_ID","name":"Tag1","type":0,"isUserEditable":true},"value":"String tag value","type":"String"},{"tag":{"id":"TAG_3_ID","name":"Tag3","type":2,"isUserEditable":true},"value":true,"type":"bool"},{"tag":{"id":"TAG_2_ID","name":"Tag2","type":1,"isUserEditable":true},"value":1,"type":"num"},{"tag":{"id":"TAG_2_ID","name":"Tag2","type":1,"isUserEditable":true},"value":0.5,"type":"num"}]}';
       expect(actual, equals(expected));
     });
 
     test('should deserialize from JSON', () {
       var givenJson =
-          '{"id":"BOOK_ID","title":"Book title","numberOfPages":155,"coverImageUrl":"book/cover/image.png","authors":[{"id":"AUTHOR_ID","name":"Author name","imageUrl":"author/image.png","tags":[{"tag":{"id":"TAG_1_ID","name":"Tag1"},"value":"String tag value","type":"String"},{"tag":{"id":"TAG_3_ID","name":"Tag3"},"value":true,"type":"bool"},{"tag":{"id":"TAG_2_ID","name":"Tag2"},"value":1,"type":"num"},{"tag":{"id":"TAG_2_ID","name":"Tag2"},"value":0.5,"type":"num"}]}],"tags":[{"tag":{"id":"TAG_1_ID","name":"Tag1"},"value":"String tag value","type":"String"},{"tag":{"id":"TAG_3_ID","name":"Tag3"},"value":true,"type":"bool"},{"tag":{"id":"TAG_2_ID","name":"Tag2"},"value":1,"type":"num"},{"tag":{"id":"TAG_2_ID","name":"Tag2"},"value":0.5,"type":"num"}]}';
+          '{"id":"BOOK_ID","title":"Book title","numberOfPages":155,"coverImageUrl":"book/cover/image.png","authors":[{"id":"AUTHOR_ID","name":"Author name","imageUrl":"author/image.png","tags":[{"tag":{"id":"TAG_1_ID","name":"Tag1","type":0,"isUserEditable":true},"value":"String tag value","type":"String"},{"tag":{"id":"TAG_3_ID","name":"Tag3","type":2,"isUserEditable":true},"value":true,"type":"bool"},{"tag":{"id":"TAG_2_ID","name":"Tag2","type":1,"isUserEditable":true},"value":1,"type":"num"},{"tag":{"id":"TAG_2_ID","name":"Tag2","type":1,"isUserEditable":true},"value":0.5,"type":"num"}]}],"tags":[{"tag":{"id":"TAG_1_ID","name":"Tag1","type":0,"isUserEditable":true},"value":"String tag value","type":"String"},{"tag":{"id":"TAG_3_ID","name":"Tag3","type":2,"isUserEditable":true},"value":true,"type":"bool"},{"tag":{"id":"TAG_2_ID","name":"Tag2","type":1,"isUserEditable":true},"value":1,"type":"num"},{"tag":{"id":"TAG_2_ID","name":"Tag2","type":1,"isUserEditable":true},"value":0.5,"type":"num"}]}';
 
       var actual = Book.fromJson(JSON.decode(givenJson));
 

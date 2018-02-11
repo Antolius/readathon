@@ -227,8 +227,8 @@ class _AuthorsPicker extends StatelessWidget {
     );
     if (author != null) {
       _controller.addAvailableAuthor(author);
-      FocusScope.of(context).requestFocus(_focusNode);
     }
+    FocusScope.of(context).requestFocus(_focusNode);
   }
 
   _buildRowDecoration(BuildContext context, int i) => i == 0

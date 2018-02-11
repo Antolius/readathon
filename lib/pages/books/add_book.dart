@@ -2,7 +2,8 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:readathon/models/models.dart';
-import 'package:readathon/pages/books/authors_picker.dart';
+import 'package:readathon/pages/books/authors_picker_form_field.dart';
+import 'package:readathon/pages/books/tags_form_field.dart';
 import 'package:readathon/redux/actions/actions.dart';
 import 'package:readathon/redux/state.dart';
 import 'package:redux/redux.dart';
@@ -76,6 +77,8 @@ class _AddBookForm extends StatelessWidget {
       new GlobalKey<FormFieldState<String>>();
   static final GlobalKey<FormFieldState<List<Author>>> _authorsKey =
       new GlobalKey<FormFieldState<List<Author>>>();
+  static final GlobalKey<FormFieldState<List<TagValue>>> _tagsKey =
+      new GlobalKey<FormFieldState<List<TagValue>>>();
   final _ViewModel _model;
 
   _AddBookForm(this._model);
@@ -89,12 +92,21 @@ class _AddBookForm extends StatelessWidget {
     }
   }
 
-  _readFormFields() => new Book(
-        _titleKey.currentState.value,
-        int.parse(_numberOfPagesKey.currentState.value),
-        _authorsKey.currentState.value,
-        tags: [],
-      );
+  _readFormFields() {
+    var tags = _tagsKey.currentState.value;
+    var authors = _authorsKey.currentState.value;
+    var numberOfPages = int.parse(_numberOfPagesKey.currentState.value);
+    return new Book(
+      _titleKey.currentState.value,
+      numberOfPages,
+      authors,
+      tags: <TagValue>[]
+        ..addAll(
+            authors.map((author) => new StringTagValue(Tag.AUTHOR, author.id)))
+        ..add(new NumTagValue(Tag.NUMBER_OF_PAGES, numberOfPages))
+        ..addAll(tags),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,41 +125,59 @@ class _AddBookForm extends StatelessWidget {
         child: new ListView(
           padding: new EdgeInsets.all(16.0),
           children: <Widget>[
-            new TextFormField(
-              key: _titleKey,
-              autofocus: false,
-              decoration: new InputDecoration(
-                icon: const Icon(Icons.title),
-                labelText: 'Title',
-              ),
-              validator: (val) =>
-                  val?.isNotEmpty ?? false ? null : 'Title is required',
-            ),
-            new TextFormField(
-              key: _numberOfPagesKey,
-              autofocus: false,
-              keyboardType: TextInputType.number,
-              decoration: new InputDecoration(
-                  icon: const Icon(Icons.library_books),
-                  labelText: 'Number of pages'),
-              validator: (val) {
-                if (val?.isEmpty ?? true) return 'Number of pages is required';
-                int num = int.parse(val, onError: (_) => null);
-                if (num == null) return 'Must be a whole number';
-                if (num < 1) return 'Number of pages must be positive';
-                return null;
-              },
-            ),
-            new AuthorsPickerFormField(
-              key: _authorsKey,
-              existingAuthors: _model.existingAuthors,
-              validator: (val) => val?.isNotEmpty ?? false
-                  ? null
-                  : 'At least one author is required',
-            ),
+            _buildTitleField(),
+            _buildNumberOfPagesField(),
+            _buildAuthorsField(),
+            new Divider(height: 32.0,),
+            _buildTagsField(),
           ],
         ),
       ),
     );
   }
+
+  TextFormField _buildTitleField() => new TextFormField(
+        key: _titleKey,
+        autofocus: false,
+        decoration: new InputDecoration(
+          icon: const Icon(Icons.title),
+          labelText: 'Title',
+        ),
+        validator: (val) =>
+            val?.isNotEmpty ?? false ? null : 'Title is required',
+      );
+
+  TextFormField _buildNumberOfPagesField() => new TextFormField(
+        key: _numberOfPagesKey,
+        autofocus: false,
+        keyboardType: TextInputType.number,
+        decoration: new InputDecoration(
+            icon: const Icon(Icons.library_books),
+            labelText: 'Number of pages'),
+        validator: (val) {
+          if (val?.isEmpty ?? true) return 'Number of pages is required';
+          int num = int.parse(val, onError: (_) => null);
+          if (num == null) return 'Must be a whole number';
+          if (num < 1) return 'Number of pages must be positive';
+          return null;
+        },
+      );
+
+  AuthorsPickerFormField _buildAuthorsField() => new AuthorsPickerFormField(
+        key: _authorsKey,
+        existingAuthors: _model.existingAuthors,
+        validator: (val) =>
+            val?.isNotEmpty ?? false ? null : 'At least one author is required',
+      );
+
+  _buildTagsField() => new TagsFormField(
+        key: _tagsKey,
+        existingTags:
+            _model.existingTags.where((tag) => tag.isUserEditable).toSet(),
+        initialValue: [
+          new StringTagValue(Tag.LANGUAGE, 'English'),
+          new BoolTagValue(Tag.FAVORITE, false),
+          new NumTagValue(Tag.NUMBER_OF_TIMES_READ, 2)
+        ],
+      );
 }

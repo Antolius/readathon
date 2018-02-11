@@ -1,34 +1,57 @@
 import 'package:uuid/uuid.dart';
 
 class Tag {
-  static final Set<Tag> DEFAULTS = new Set.from([
+  static final List<Tag> DEFAULTS = const [
     AUTHOR,
     NUMBER_OF_PAGES,
     LANGUAGE,
     COUNTRY,
-  ]);
-  static final Tag AUTHOR = new Tag('author', id: 'TAG_AUTHOR');
-  static final Tag NUMBER_OF_PAGES =
-      new Tag('number of pages', id: 'TAG_NUMBER_OF_PAGES');
-  static final Tag LANGUAGE = new Tag('language', id: 'TAG_NUMBER_LANGUAGE');
-  static final Tag COUNTRY = new Tag('country', id: 'TAG_COUNTRY');
+    FAVORITE,
+    NUMBER_OF_TIMES_READ
+  ];
+  static const Tag AUTHOR =
+      const Tag._internal('author', 'TAG_AUTHOR', TagType.STRING);
+  static const NUMBER_OF_PAGES = const Tag._internal(
+      'number of pages', 'TAG_NUMBER_OF_PAGES', TagType.NUM);
+  static const LANGUAGE =
+      const Tag._internal('language', 'TAG_LANGUAGE', TagType.STRING, true);
+  static const COUNTRY =
+      const Tag._internal('country', 'TAG_COUNTRY', TagType.STRING, true);
+  static const FAVORITE =
+      const Tag._internal('favorite', 'TAG_FAVORITE', TagType.BOOL, true);
+  static const NUMBER_OF_TIMES_READ = const Tag._internal(
+      'number of times read', 'TAG_NUMBER_OF_READS', TagType.NUM, true);
 
   final String id;
   final String name;
+  final TagType type;
+  final bool isUserEditable;
+
+  const Tag._internal(this.name, this.id, this.type,
+      [this.isUserEditable = false]);
 
   Tag(
-    this.name, {
+    this.name,
+    this.type, {
     String id,
   })
-      : this.id = id ?? new Uuid().v4();
+      : this.id = id ?? new Uuid().v4(),
+        this.isUserEditable = true,
+        assert(name != null && name.isNotEmpty);
 
   Map<String, dynamic> toJson() => {
-        "id": this.id,
-        "name": this.name,
+        'id': this.id,
+        'name': this.name,
+        'type': this.type.index,
+        'isUserEditable': this.isUserEditable,
       };
 
-  static Tag fromJson(Map<String, dynamic> json) =>
-      new Tag(json['name'] as String, id: json['id'] as String);
+  static Tag fromJson(Map<String, dynamic> json) => new Tag._internal(
+        json['name'] as String,
+        json['id'] as String,
+        TagType.values[json['type'] as int],
+        json['isUserEditable'] as bool,
+      );
 
   @override
   bool operator ==(Object other) =>
@@ -36,11 +59,16 @@ class Tag {
       other is Tag &&
           runtimeType == other.runtimeType &&
           id == other.id &&
-          name == other.name;
+          name == other.name &&
+          type == other.type &&
+          isUserEditable == other.isUserEditable;
 
   @override
-  int get hashCode => id.hashCode ^ name.hashCode;
+  int get hashCode =>
+      id.hashCode ^ name.hashCode ^ type.hashCode ^ isUserEditable.hashCode;
 }
+
+enum TagType { STRING, NUM, BOOL }
 
 typedef ReturnType VisitFunction<TagValueType extends TagValue<dynamic>,
     ReturnType>(TagValueType tagValue);
@@ -104,7 +132,10 @@ abstract class TagValue<ValueType> {
 class StringTagValue extends TagValue<String> {
   final String value;
 
-  StringTagValue(Tag tag, this.value) : super(tag);
+  StringTagValue(Tag tag, this.value)
+      : assert(tag != null && tag.type == TagType.STRING),
+        assert(value != null),
+        super(tag);
 
   @override
   R accept<R>(TagValueVisitor<R> visitor) => visitor.visitString(this);
@@ -130,7 +161,10 @@ class StringTagValue extends TagValue<String> {
 class BoolTagValue extends TagValue<bool> {
   final bool value;
 
-  BoolTagValue(Tag tag, this.value) : super(tag);
+  BoolTagValue(Tag tag, this.value)
+      : assert(tag != null && tag.type == TagType.BOOL),
+        assert(value != null),
+        super(tag);
 
   @override
   R accept<R>(TagValueVisitor<R> visitor) => visitor.visitBool(this);
@@ -157,7 +191,10 @@ class BoolTagValue extends TagValue<bool> {
 class NumTagValue extends TagValue<num> {
   final num value;
 
-  NumTagValue(Tag tag, this.value) : super(tag);
+  NumTagValue(Tag tag, this.value)
+      : assert(tag != null && tag.type == TagType.NUM),
+        assert(value != null),
+        super(tag);
 
   @override
   R accept<R>(TagValueVisitor<R> visitor) => visitor.visitNum(this);
